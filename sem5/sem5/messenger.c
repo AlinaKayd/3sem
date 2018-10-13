@@ -22,8 +22,6 @@ int main(int argc, char **argv){
     int fd1, fd2, result;
     char name1[]="1.fifo";
     char name2[]="2.fifo";
-    char * str1 = (char*)malloc(maxstr*sizeof(char));
-    char * str2 = (char*)malloc(maxstr*sizeof(char));
     //(void)umask(0);
     if(mknod(name1, S_IFIFO | 0666, 0) < 0){
         if(errno != EEXIST){
@@ -38,14 +36,14 @@ int main(int argc, char **argv){
         }
     }
     result = fork();
-    if(result == 0)
-    {
-        printf("child\n");
-    }
-    if(result > 0)
-    {
-        printf("parent\n");
-    }
+//    if(result == 0)
+//    {
+//        printf("child\n");
+//    }
+//    if(result > 0)
+//    {
+//        printf("parent\n");
+//    }
     if(result < 0){
         printf("Can\'t fork child\n");
         exit(-1);
@@ -58,8 +56,11 @@ int main(int argc, char **argv){
             }
             while(1)
             {
+                char * str1 = (char*)malloc(maxstr*sizeof(char));
                 fgets(str1, maxstr, stdin);
-                write(fd2, stdin, strlen(str1));
+                write(fd2, str1, strlen(str1));
+                free(str1);
+                
             }
         }
         if(atoi(argv[1]) == 1){
@@ -69,8 +70,11 @@ int main(int argc, char **argv){
             }
             while(1)
             {
+                char * str1 = (char*)malloc(maxstr*sizeof(char));
                 fgets(str1, maxstr, stdin);
-                write(fd1, stdin, strlen(str1));
+                //str1[strlen(str1) + 1] = '\0';
+                write(fd1, str1, strlen(str1));
+                free(str1);
             }
         }
        // printf("read fd = %d\n", fd);
@@ -82,8 +86,11 @@ int main(int argc, char **argv){
                 exit(-1);
             }
             while(1) {
+                char * str2 = (char*)malloc(maxstr*sizeof(char));
                 read(fd1, str2, maxstr);
-                printf("%s\n", str2);
+                //str2[strlen(str2)+1] = '\0';
+                printf("%s", str2);
+                free(str2);
             }
         }
         if(atoi(argv[1]) == 1) {
@@ -92,13 +99,14 @@ int main(int argc, char **argv){
                 exit(-1);
             }
             while(1) {
+                char * str2 = (char*)malloc(maxstr*sizeof(char));
                 read(fd2, str2, maxstr);
-                printf("%s\n", str2);
+                //str2[strlen(str2)+1] = '\0';
+                printf("%s", str2);
+                free(str2);
             }
         }
         //printf("write fd = %d\n", fd);
     }
-    free(str1);
-    free(str2);
     return 0;
 }

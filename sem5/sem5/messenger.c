@@ -58,7 +58,7 @@ int main(int argc, char **argv){
             {
                 char * str1 = (char*)calloc(maxstr, sizeof(char));
                 fgets(str1, maxstr, stdin);
-                str1[strlen(str1) + 1] = '\0';
+                //str1[strlen(str1) + 1] = '\0';
                 //printf("%s", str1);
                 write(fd1, str1, strlen(str1));
                 free(str1);

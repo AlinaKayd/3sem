@@ -5,7 +5,6 @@
 //  Created by mac on 04.10.2018.
 //  Copyright © 2018 mac. All rights reserved.
 //
-//#include "all.h"
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>

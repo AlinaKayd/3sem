@@ -22,7 +22,7 @@ int main(int argc, char **argv){
     int fd1, fd2, result;
     char name1[]="1.fifo";
     char name2[]="2.fifo";
-    //(void)umask(0);
+
     if(mknod(name1, S_IFIFO | 0666, 0) < 0){
         if(errno != EEXIST){
             printf("error");
@@ -36,20 +36,22 @@ int main(int argc, char **argv){
         }
     }
     result = fork();
-//    if(result == 0)
-//    {
-//        printf("child\n");
-//    }
-//    if(result > 0)
-//    {
-//        printf("parent\n");
-//    }
     if(result < 0){
         printf("Can\'t fork child\n");
         exit(-1);
     }
+    
     if(result > 0) {
         if(atoi(argv[1]) == 1){
+            // FIXIT: у вас код значительно дублируется, причем внутри if (result > 0) незачем объявлять разные названия для fd1 и fd2
+            /*
+            if((fd = open(atoi(argv[1]) == 1 ? name1 : name2, O_WRONLY)) < 0){
+                printf("Can\'t open FIFO for writting\n");
+                exit(-1);
+            }
+            */
+            // Во второй части аналогичное дублирование кода, от которого нужно избавиться
+            
             if((fd1 = open(name1, O_WRONLY)) < 0){
                 printf("Can\'t open FIFO for writting\n");
                 exit(-1);
@@ -58,8 +60,6 @@ int main(int argc, char **argv){
             {
                 char * str1 = (char*)calloc(maxstr, sizeof(char));
                 fgets(str1, maxstr, stdin);
-                //str1[strlen(str1) + 1] = '\0';
-                //printf("%s", str1);
                 write(fd1, str1, strlen(str1));
                 free(str1);
             }
@@ -74,8 +74,7 @@ int main(int argc, char **argv){
                 char * str1 = (char*)calloc(maxstr, sizeof(char));
                 fgets(str1, maxstr, stdin);
                 write(fd2, str1, strlen(str1));
-                free(str1);
-                
+                free(str1);     
             }
         }
        // printf("read fd = %d\n", fd);

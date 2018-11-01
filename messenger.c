@@ -19,7 +19,7 @@
 
 int main(int argc, char **argv){
     
-    int fd1, fd2, result;
+    int fd, result;
     char name1[]="1.fifo";
     char name2[]="2.fifo";
 
@@ -41,64 +41,28 @@ int main(int argc, char **argv){
         exit(-1);
     }
     
-    if(result > 0) {
-        if(atoi(argv[1]) == 1){
-            // FIXIT: у вас код значительно дублируется, причем внутри if (result > 0) незачем объявлять разные названия для fd1 и fd2
-            /*
-            if((fd = open(atoi(argv[1]) == 1 ? name1 : name2, O_WRONLY)) < 0){
-                printf("Can\'t open FIFO for writting\n");
-                exit(-1);
-            }
-            */
-            // Во второй части аналогичное дублирование кода, от которого нужно избавиться
-            
-            if((fd1 = open(name1, O_WRONLY)) < 0){
-                printf("Can\'t open FIFO for writting\n");
-                exit(-1);
-            }
-            while(1)
-            {
-                char * str1 = (char*)calloc(maxstr, sizeof(char));
-                fgets(str1, maxstr, stdin);
-                write(fd1, str1, strlen(str1));
-                free(str1);
-            }
+    if(result > 0)
+    {
+        if((fd = open(atoi(argv[1]) == 1 ? name1 : name2, O_WRONLY)) < 0){
+            printf("Can\'t open FIFO for writting\n");
+            exit(-1);
         }
-        if(atoi(argv[1]) == 2){
-            if((fd2 = open(name2, O_WRONLY)) < 0){
-                printf("Can\'t open FIFO for writting\n");
-                exit(-1);
-            }
-            while(1)
-            {
-                char * str1 = (char*)calloc(maxstr, sizeof(char));
-                fgets(str1, maxstr, stdin);
-                write(fd2, str1, strlen(str1));
-                free(str1);     
-            }
+        while(1)
+        {
+            char * str1 = (char*)calloc(maxstr, sizeof(char));
+            fgets(str1, maxstr, stdin);
+            write(fd, str1, strlen(str1));
+            free(str1);
         }
     }
     if(result == 0) {
-        if(atoi(argv[1]) == 1) {
-            if((fd2 = open(name2, O_RDONLY)) < 0){
-                printf("Can\'t open FIFO for reading\n");
-                exit(-1);
-            }
-            while(1) {
-                char * str2 = (char*)calloc(maxstr, sizeof(char));
-                read(fd2, str2, maxstr);
-                printf("%s", str2);
-                free(str2);
-            }
+        if((fd = open(atoi(argv[1]) == 1 ? name2 : name1, O_WRONLY)) < 0){
+            printf("Can\'t open FIFO for writting\n");
+            exit(-1);
         }
-        if(atoi(argv[1]) == 2) {
-            if((fd1 = open(name1, O_RDONLY)) < 0){
-                printf("Can\'t open FIFO for reading\n");
-                exit(-1);
-            }
             while(1) {
                 char * str2 = (char*)calloc(maxstr, sizeof(char));
-                read(fd1, str2, maxstr);
+                read(fd, str2, maxstr);
                 printf("%s", str2);
                 free(str2);
             }

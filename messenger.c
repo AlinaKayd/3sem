@@ -77,7 +77,6 @@ int main(int argc, char **argv){
                 free(str1);     
             }
         }
-       // printf("read fd = %d\n", fd);
     }
     if(result == 0) {
         if(atoi(argv[1]) == 1) {
@@ -88,7 +87,6 @@ int main(int argc, char **argv){
             while(1) {
                 char * str2 = (char*)calloc(maxstr, sizeof(char));
                 read(fd2, str2, maxstr);
-                //str2[strlen(str2)+1] = '\0';
                 printf("%s", str2);
                 free(str2);
             }
@@ -101,12 +99,10 @@ int main(int argc, char **argv){
             while(1) {
                 char * str2 = (char*)calloc(maxstr, sizeof(char));
                 read(fd1, str2, maxstr);
-                //str2[strlen(str2)+1] = '\0';
                 printf("%s", str2);
                 free(str2);
             }
         }
-        //printf("write fd = %d\n", fd);
     }
     return 0;
 }

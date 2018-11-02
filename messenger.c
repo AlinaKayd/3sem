@@ -5,7 +5,7 @@
 //  Created by mac on 11.10.2018.
 //  Copyright © 2018 mac. All rights reserved.
 //
-#define maxstr 1024
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -16,6 +16,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <strings.h>
+
+/*
+Хорошо, давайте зачтем текущий вариант, но обратите внимание на следующие пожелания:
+1) константы, объявленные через define, пишите в формате MAX_STRING_SIZE
+2) если бы вы сделали массив names, то можно было бы, например, сделать цикл от 0 до 1, и в нем уже позвать mknod
+3) каждый раз при чтении/отправке строки выделять/освобождать память в куче излишне. можно сделать это 1 раз до цикла
+*/
+
+#define maxstr 1024
 
 int main(int argc, char **argv){
     

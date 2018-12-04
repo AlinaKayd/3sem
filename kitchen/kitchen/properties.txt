@@ -1,0 +1,5 @@
+cup 3 2
+plate 4 5
+fork 1 2
+board 4 2
+spoon 1 3
